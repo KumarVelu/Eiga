@@ -12,7 +12,7 @@ You can create you own key with this link https://www.themoviedb.org/account/sig
 Once you get the API key, paste it in Eiga/gradle.properties
 as API_KEY="YOUR_API_KEY"
 
-(Note: In case if you are cloning this project, gradle.properties file won't be created, you will have to create it manually)
+(Note: In case if you are cloning this project, gradle.properties file won't be created, you will have to create it manually in the root folder of your project Eiga/gradle.properties)
 
 ## Library used
 
