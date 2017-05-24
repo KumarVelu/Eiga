@@ -18,6 +18,9 @@ as API_KEY="YOUR_API_KEY"
 
 ![screen](../master/art/Movie-list.png)
 
+
+![screen](../master/art/Movie-detail.png)
+
 ## Library used
 
 [Picasso](http://square.github.io/picasso/) - A powerful image downloading and caching library for Android.
