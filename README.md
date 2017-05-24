@@ -16,7 +16,7 @@ as API_KEY="YOUR_API_KEY"
 
 ## Screen shots
 
-![screen](../master/art/Eiga-Screen-1.png)
+![screen](../master/art/Movie-list.png)
 
 ## Library used
 
