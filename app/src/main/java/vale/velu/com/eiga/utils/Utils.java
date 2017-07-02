@@ -1,5 +1,6 @@
 package vale.velu.com.eiga.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -19,6 +20,7 @@ public class Utils {
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
+    @SuppressLint("SimpleDateFormat")
     public static String formatReleaseDate(String date) {
 
         SimpleDateFormat fromUser = new SimpleDateFormat("yyyy-MM-dd");

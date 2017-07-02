@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -15,7 +16,8 @@
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="@string/app_name"
         app:theme="@style/ToolBarColorOverflowMenu"
-        app:titleTextColor="@android:color/white"/>
+        app:titleTextColor="@android:color/white"
+        tools:targetApi="lollipop"/>
 
     <LinearLayout
         android:id="@+id/movie_list_layout"

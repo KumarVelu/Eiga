@@ -23,8 +23,10 @@
     <string name="sort_order_pref_key">SortOrderKey</string>
     <string name="default_sort_order">popular</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="dummy_overview">Following the events of Age of Ultron, the collective governments of the world pass an act designed to regulate all superhuman activity. This polarizes opinion amongst the Avengers, causing two factions to side with Iron Man or Captain America, which causes an epic battle between former allies.</string>
+
+    <!--content description for images-->
+    <string name="movie_poster_cd">Movie Poster Image</string>
+    <string name="rating_cd">Rating</string>
 
 </resources>
