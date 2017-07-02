@@ -25,22 +25,12 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     private static final String TAG = MovieListAdapter.class.getSimpleName();
     private Context mContext;
     private List<Movie> mMovieList;
-    private MovieListAdapterOnClickHandler clickHandler;
+    private IMovieClickListener mClickHandler;
     private LayoutInflater mInflater;
 
-    private View.OnClickListener mItemClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            if (clickHandler != null) {
-                Movie movie = (Movie) view.getTag();
-                clickHandler.onClick(movie);
-            }
-        }
-    };
-
-    public MovieListAdapter(Context context, MovieListAdapterOnClickHandler clickHandler) {
+    public MovieListAdapter(Context context, IMovieClickListener clickHandler) {
         mContext = context;
-        this.clickHandler = clickHandler;
+        mClickHandler = clickHandler;
         mInflater = LayoutInflater.from(context);
     }
 
@@ -52,7 +42,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
 
     @Override
     public void onBindViewHolder(MovieListViewHolder holder, int position) {
-        Movie movie = mMovieList.get(position);
+        final Movie movie = mMovieList.get(position);
         Picasso.with(mContext)
                 .load(Constants.POSTER_PATH_PREFIX + movie.getPosterPath())
                 .fit()
@@ -61,7 +51,12 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         holder.tvTitle.setText(movie.getTitle());
         holder.tvRating.setText(movie.getRating());
         holder.itemView.setTag(movie);
-        holder.itemView.setOnClickListener(mItemClickListener);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mClickHandler.onMovieClick(movie);
+            }
+        });
     }
 
     @Override
@@ -74,8 +69,8 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         notifyDataSetChanged();
     }
 
-    public interface MovieListAdapterOnClickHandler {
-        void onClick(Movie movie);
+    public interface IMovieClickListener {
+        void onMovieClick(Movie movie);
     }
 
     public class MovieListViewHolder extends RecyclerView.ViewHolder {

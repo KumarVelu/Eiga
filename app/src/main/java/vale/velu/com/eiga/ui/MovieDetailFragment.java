@@ -8,7 +8,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,20 +58,6 @@ public class MovieDetailFragment extends BaseFragment {
         if (getArguments() != null) {
             mMovie = (Movie) getArguments().getSerializable(MOVIE_KEY);
         }
-        Log.i(TAG, "onCreate: mMovie ==> " + mMovie);
-    }
-
-    @Override
-    public void setArguments(Bundle args) {
-        super.setArguments(args);
-    }
-
-    @Override
-    protected void updateArgs(Bundle args) {
-        if (args.getSerializable(MOVIE_KEY) != null) {
-            mMovie = (Movie) args.getSerializable(MOVIE_KEY);
-            getArguments().putSerializable(MOVIE_KEY, mMovie);
-        }
     }
 
     @Override
@@ -101,7 +86,7 @@ public class MovieDetailFragment extends BaseFragment {
 
         mCollapsingToolbarLayout.setTitle(mMovie.getTitle().trim());
         tvTitle.setText(mMovie.getTitle());
-        tvReleaseDate.setText(Utils.formatRelaseDate(mMovie.getReleaseDate()));
+        tvReleaseDate.setText(Utils.formatReleaseDate(mMovie.getReleaseDate()));
         tvRating.setText(mMovie.getRating());
         tvPlotSynopsis.setText(mMovie.getPlotSynopsis());
 
@@ -119,15 +104,4 @@ public class MovieDetailFragment extends BaseFragment {
             }
         });
     }
-
-    @Override
-    protected void onBackPressed() {
-        super.onBackPressed();
-        mMovie = null;
-    }
-
-    public Movie getMovie() {
-        return mMovie;
-    }
-
 }

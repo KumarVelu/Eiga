@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +23,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.util.List;
 
@@ -37,14 +39,13 @@ import vale.velu.com.eiga.model.Movie;
 import vale.velu.com.eiga.model.MovieResult;
 import vale.velu.com.eiga.services.ApiInterface;
 import vale.velu.com.eiga.services.ServiceGenerator;
-import vale.velu.com.eiga.ui.assist.IActionListener;
 import vale.velu.com.eiga.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MovieListFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener,
-        View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+        View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, MovieListAdapter.IMovieClickListener {
 
     private static final String TAG = MovieListFragment.class.getSimpleName();
 
@@ -65,13 +66,13 @@ public class MovieListFragment extends Fragment implements SharedPreferences.OnS
 
     private Context mContext;
     private MovieListAdapter mMovieListAdapter;
+    private MovieDetailFragment mMovieDetailFragment;
+    private List<Movie> mMovieList;
+    private final String MOVIE_LIST_KEY = "movieList";
 
-    private IActionListener mParentListener;
 
-
-    public static MovieListFragment newInstance(IActionListener listener) {
+    public static MovieListFragment newInstance() {
         MovieListFragment fragment = new MovieListFragment();
-        fragment.mParentListener = listener;
         return fragment;
     }
 
@@ -107,17 +108,16 @@ public class MovieListFragment extends Fragment implements SharedPreferences.OnS
         retryBtn.setOnClickListener(this);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         initializeUi();
-        fetchMovies();
+
+        if(savedInstanceState == null) fetchMovies();
+        else {
+            mMovieList = (List<Movie>) savedInstanceState.getSerializable(MOVIE_LIST_KEY);
+            setUiWithMovieList();
+        }
     }
 
     private void initializeUi() {
-        mMovieListAdapter = new MovieListAdapter(mContext, new MovieListAdapter.MovieListAdapterOnClickHandler() {
-            @Override
-            public void onClick(Movie movie) {
-                if (mParentListener != null)
-                    mParentListener.onAction(null, movie);
-            }
-        });
+        mMovieListAdapter = new MovieListAdapter(mContext, this);
         mRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
         mRecyclerView.setAdapter(mMovieListAdapter);
     }
@@ -144,7 +144,8 @@ public class MovieListFragment extends Fragment implements SharedPreferences.OnS
                 @Override
                 public void onResponse(Call<MovieResult> call, Response<MovieResult> response) {
                     if (response.code() == HttpURLConnection.HTTP_OK) {
-                        setUiWithMovieList(response.body().getMovieList());
+                        mMovieList = response.body().getMovieList();
+                        setUiWithMovieList();
                     }
                 }
 
@@ -160,11 +161,11 @@ public class MovieListFragment extends Fragment implements SharedPreferences.OnS
         }
     }
 
-    public void setUiWithMovieList(List<Movie> movieList) {
+    public void setUiWithMovieList() {
         mSwipeRefreshLayout.setRefreshing(false);
         mNoInternetLayout.setVisibility(View.GONE);
         mMovieListLayout.setVisibility(View.VISIBLE);
-        mMovieListAdapter.swapData(movieList);
+        mMovieListAdapter.swapData(mMovieList);
     }
 
     @Override
@@ -193,12 +194,31 @@ public class MovieListFragment extends Fragment implements SharedPreferences.OnS
 
     @Override
     public void onRefresh() {
-
         if (Utils.isInternetOn(mContext)) {
             fetchMovies();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
             Snackbar.make(getView(), getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onMovieClick(Movie movie) {
+        Bundle args = new Bundle();
+        args.putSerializable(MovieDetailFragment.MOVIE_KEY, movie);
+        if (mMovieDetailFragment == null) {
+            mMovieDetailFragment = MovieDetailFragment.newInstance();
+            mMovieDetailFragment.setArguments(args);
+        } else
+            mMovieDetailFragment.setArguments(args);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.add(R.id.frame, mMovieDetailFragment)
+                .addToBackStack(null).commit();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(MOVIE_LIST_KEY, (Serializable) mMovieList);
     }
 }

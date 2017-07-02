@@ -19,7 +19,7 @@ public class Utils {
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
-    public static String formatRelaseDate(String date) {
+    public static String formatReleaseDate(String date) {
 
         SimpleDateFormat fromUser = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat releaseDateFormat = new SimpleDateFormat("MMM dd, yyyy");

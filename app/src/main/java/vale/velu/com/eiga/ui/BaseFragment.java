@@ -1,6 +1,5 @@
 package vale.velu.com.eiga.ui;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 /**
@@ -15,20 +14,5 @@ public abstract class BaseFragment extends Fragment {
 
         if (count > 0)
             getFragmentManager().popBackStackImmediate();
-    }
-
-    @Override
-    public void setArguments(Bundle args) {
-        try {
-            super.setArguments(args);
-        } catch (Exception e) {
-            updateArgs(args);
-        }
-    }
-
-    protected abstract void updateArgs(Bundle args);
-
-    protected void onBackPressed(){
-
     }
 }

@@ -4,13 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-import vale.velu.com.eiga.ui.assist.BaseData;
-import vale.velu.com.eiga.utils.Constants;
-
 /**
  * Created by kumar_velu on 27-12-2016.
  */
-public class Movie implements Serializable, BaseData {
+public class Movie implements Serializable {
 
     @SerializedName("title")
     private String title;
@@ -83,10 +80,5 @@ public class Movie implements Serializable, BaseData {
                 ", backDropPath='" + backDropPath + '\'' +
                 ", plotSynopsis='" + plotSynopsis + '\'' +
                 '}';
-    }
-
-    @Override
-    public String getDataType() {
-        return Constants.MOVIE;
     }
 }
