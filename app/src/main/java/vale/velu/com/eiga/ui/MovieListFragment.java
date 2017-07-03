@@ -4,6 +4,7 @@ package vale.velu.com.eiga.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -108,7 +109,6 @@ public class MovieListFragment extends Fragment implements SharedPreferences.OnS
         retryBtn.setOnClickListener(this);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         initializeUi();
-
         if(savedInstanceState == null) fetchMovies();
         else {
             mMovieList = (List<Movie>) savedInstanceState.getSerializable(MOVIE_LIST_KEY);
@@ -118,7 +118,11 @@ public class MovieListFragment extends Fragment implements SharedPreferences.OnS
 
     private void initializeUi() {
         mMovieListAdapter = new MovieListAdapter(mContext, this);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
+
+        if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+            mRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
+        else
+            mRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));
         mRecyclerView.setAdapter(mMovieListAdapter);
     }
 
